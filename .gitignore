@@ -1,1 +1,55 @@
+# Yungu Classroom / Learning Brief — Git Ignore Rules
+# ==========================================
+# 凭据、生成的简报、日志和私人学习数据保存在 Git 之外。
+
+# ============================================================
+# DATA DIRECTORY (all git-ignored via wildcard)
+# ============================================================
+data/
+
+# But NOT skill source files:
+#   skills/learning-brief/    ← These ARE committed (skill code only)
+#   src/yungu_client.py       ← API client code is committed
+
+# ============================================================
+# SPECIFIC EXCLUSIONS
+# ============================================================
+
+# Credentials
+data/.yungu.env
+*.env
+!README.md
+
+# Generated briefs (JSON & HTML)
+data/morning/*.json
+data/morning/*.html
+data/evening/*.json
+data/evening/*.html
+data/logs/*.log
+data/logs/*.txt
+
+# Browser automation data
+data/browser_cookies*
+
+# Cache files
 __pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary exports
+/tmp/yungu_*.json
+/tmp/yungu_*.html
+/tmp/yungu_api_exploration.json
