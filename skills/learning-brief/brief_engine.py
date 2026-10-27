@@ -11,15 +11,21 @@ from datetime import date, datetime
 from pathlib import Path
 from typing import Optional, List, Dict, Any
 
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+# Resolve paths relative to this file (skills/learning-brief/brief_engine.py)
+# parents[2] from resolved path goes up two levels to hermes-module02/
+_PROJECT_RESOLVED = Path(__file__).resolve()
+PROJECT_ROOT = _PROJECT_RESOLVED.parents[2]
+_src_dir = str(PROJECT_ROOT / "src")
+if _src_dir not in sys.path:
+    sys.path.insert(0, _src_dir)
+
 try:
     from yungu_client import YunguClient, load_session_cookie
 except ImportError:
     print("ERROR: Cannot import yungu_client. Ensure src/yungu_client.py exists.")
     sys.exit(1)
 
-# Directory structure
-PROJECT_ROOT = Path(__file__).parent.parent
+# Directory structure (all relative to hermes-module02/ project root)
 DATA_DIR = PROJECT_ROOT / "data"
 MORNING_DIR = DATA_DIR / "morning"
 EVENING_DIR = DATA_DIR / "evening"
