@@ -26,22 +26,36 @@ Body: {"courseId": <id>, "semesterId": <sid>}
 ```
 Returns `teachingReflectionPrompts` and `lectureAttendancePrompts`.
 
-### User Relations
+### User Profile & Identity
 ```
-GET /api/user/relation/myRecordList?semesterId=<id>
-POST /api/user/relation/updateIsPublic   # needs body
+GET /api/currentUser
+GET /api/user/info
+```
+Returns full student profile: userId, name, enName, avatar, identity (student/teacher),
+grade, stage, studentNo, phoneNumber, email, loginId, etc.
+
+### User Relations (Student-facing)
+```
+GET /api/user/relation/myLessonList?courseId=<id>        → returns [] (empty - may need different params)
+GET /api/user/relation/lessonListStatistics                → myListenTotal, myListenInSchool, etc.
+GET /api/user/relation/lessonDetail?courseId=<id>&semesterId=<sid>  → "系统异常" (needs context)
+GET /api/user/relation/lessonRecordList                    → needs specific lessonId
+GET /api/user/relation/openLessonList                      → needs semesterId
+GET /api/user/relation/updateIsPublic                      → POST required
 ```
 
-### Teachers
+### Lesson Detail / List
 ```
-GET /api/list/lesson/teacher?semesterId=<id>
+GET /api/lesson/listCourseLesson?                        → "system error" (internal routing issue)
+GET /api/lesson/listCourseLessonByTeacher?               → 404
+GET /api/lesson/getGroupListByCourse?courseId=<id>       → "system error"
+GET /api/lesson/learningSteps/detail?                    → no jurisdiction (teacher-only?)
+POST /api/lesson/getTeachingReflectionOrRecord?courseId=<id>
+GET /api/list/lesson/teacher?semesterId=<id>             → teacher list ✅
+GET /api/get/openLessonList                              → data available ✅
+GET /api/get/openLesson                                  → needs params
+GET /api/getLessonDetail                                 → unknown
 ```
-Returns teacher list with userId, name, enName, avatar URL.
-
-```
-GET /api/course/getAllClassesByCourse?courseId=<id>
-```
-(Requires course parameter - returns class info)
 
 ### Course Resources
 ```
@@ -98,6 +112,22 @@ GET  /api/plan/pageListPlanDay
 GET  /api/plan/pageListPlanWeek
 GET  /api/plan/listCourse
 GET  /api/plan/detail (POST needed)
+```
+
+### Feedback / Student Weekly Plan
+Partial success - returns structure but content is null without specific params.
+```
+GET /api/feedback/parent/planWeek?semesterId=<id>        → ✅ status=true, content=null
+GET /api/feedback/parent/planWeekDetail                  → ✅ status=true, needs week/date params
+GET /api/feedback/planContentList                        → needs more params
+GET /api/feedback/planList                               → needs more params
+```
+
+### Time Machine (Student Board features)
+Return 404 on direct HTTP — likely requires browser-based routing:
+```
+GET /api/timeMachine/listTimeMachinePlanModuleOfStuBoard
+GET /api/timeMachine/getDataByPlanIdAndStudentUserId
 ```
 
 ### Admin/Teacher endpoints (not accessible for students)
